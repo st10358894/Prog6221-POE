@@ -1,0 +1,88 @@
+﻿<Window x:Class="CybersecurityChatbot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RELEEY - Cybersecurity Assistant" Height="700" Width="900"
+        Background="#1E1E1E" Foreground="White" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Bot Name Header -->
+        <Border Grid.Row="0" Background="#2C2C2C" CornerRadius="10" Padding="10" Margin="0,0,0,10" BorderBrush="White" BorderThickness="1">
+            <TextBlock Text="RELEEY - Cybersecurity Assistant" FontSize="20" FontWeight="Bold" Foreground="LightGreen" HorizontalAlignment="Center"/>
+        </Border>
+
+        
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
+            <StackPanel x:Name="ChatPanel"/>
+        </ScrollViewer>
+
+    
+        <StackPanel Grid.Row="2" Orientation="Vertical">
+            <TextBox x:Name="UserInputTextBox" Margin="0,0,0,5" Height="30"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Send" Click="SendButton_Click" Width="80" Margin="5"/>
+                <Button Content="Show Tasks" Click="ShowTasks_Click" Width="100" Margin="5"/>
+                <Button Content="Clear Tasks" Click="ClearTasks_Click" Width="100" Margin="5"/>
+                <Button Content="Add Task" Click="OpenAddTaskPanel_Click" Width="100" Margin="5"/>
+                <Button Content="Start Quiz" Click="StartQuiz_Click" Width="100" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+
+       
+        <Border x:Name="AddTaskPanel" Background="#2C2C2C" CornerRadius="10" BorderBrush="White" BorderThickness="1"
+                Width="350" Height="320" VerticalAlignment="Center" HorizontalAlignment="Center"
+                Visibility="Collapsed" Panel.ZIndex="100">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Task Title:" Grid.Row="0"/>
+                <TextBox x:Name="TitleBox" Grid.Row="1" Margin="0,5,0,10"/>
+
+                <TextBlock Text="Description:" Grid.Row="2"/>
+                <TextBox x:Name="DescBox" Grid.Row="3" Height="60" TextWrapping="Wrap" Margin="0,5,0,10"/>
+
+                <TextBlock Text="Reminder Date:" Grid.Row="4"/>
+                <DatePicker x:Name="ReminderDatePicker" Grid.Row="5" Margin="0,5,0,0"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Grid.Row="6">
+                    <Button Content="Add" Width="80" Click="AddTaskButton_Click" Background="#4CAF50" Foreground="White" Margin="0,0,10,0"/>
+                    <Button Content="Cancel" Width="80" Click="CancelAddTaskButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        
+        <Border x:Name="QuizPanel" Background="#333" CornerRadius="10" BorderBrush="White" BorderThickness="1"
+                Width="500" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center"
+                Visibility="Collapsed" Panel.ZIndex="99">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="QuizQuestionText" FontSize="16" FontWeight="Bold" TextWrapping="Wrap" Grid.Row="0" Margin="0,0,0,10"/>
+                <StackPanel x:Name="QuizOptionsPanel" Grid.Row="1"/>
+                <TextBlock x:Name="QuizFeedbackText" Grid.Row="2" Margin="0,10,0,10" FontWeight="Bold"/>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="NextQuestionButton" Content="Next" Click="NextQuestionButton_Click" Width="80" Margin="0,0,10,0" Visibility="Collapsed"/>
+                    <Button x:Name="RetryQuizButton" Content="Retry" Click="RetryQuizButton_Click" Width="80" Visibility="Collapsed"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
