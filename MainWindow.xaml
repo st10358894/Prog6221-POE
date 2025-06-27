@@ -2,41 +2,116 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="RELEEY - Cybersecurity Assistant" Height="700" Width="900"
-        Background="#1E1E1E" Foreground="White" WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
+        WindowStartupLocation="CenterScreen"
+        Background="#1A2525"
+        Foreground="White">
+    <Window.Resources>
+        <!-- Button Style with Hover Effect -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderBrush="#FFFFFF33"
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#45A049"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" BlurRadius="5" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#3D8B40"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TextBlock Style for Chat Messages -->
+        <Style TargetType="TextBlock" x:Key="ChatMessageStyle">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Animation for Panels -->
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                            From="0" To="1" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="FadeOut">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                            From="1" To="0" Duration="0:0:0.3"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Bot Name Header -->
-        <Border Grid.Row="0" Background="#2C2C2C" CornerRadius="10" Padding="10" Margin="0,0,0,10" BorderBrush="White" BorderThickness="1">
-            <TextBlock Text="RELEEY - Cybersecurity Assistant" FontSize="20" FontWeight="Bold" Foreground="LightGreen" HorizontalAlignment="Center"/>
+        <!-- Header -->
+        <Border Grid.Row="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2C2C2C" Offset="0"/>
+                    <GradientStop Color="#1A2525" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border CornerRadius="10" Padding="15" Margin="0,0,0,10" BorderBrush="#FFFFFF33" BorderThickness="1">
+                <TextBlock Text="RELEEY - Cybersecurity Assistant" 
+                           FontSize="22" 
+                           FontWeight="Bold" 
+                           Foreground="LightGreen" 
+                           HorizontalAlignment="Center"
+                           FontFamily="Segoe UI"/>
+            </Border>
         </Border>
 
-        
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
-            <StackPanel x:Name="ChatPanel"/>
-        </ScrollViewer>
+        <!-- Chat Area -->
+        <Border Grid.Row="1" Background="#2C2C2C" CornerRadius="10" Margin="0,10,0,10" BorderBrush="#FFFFFF33" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="5">
+                <StackPanel x:Name="ChatPanel"/>
+            </ScrollViewer>
+        </Border>
 
-    
+        <!-- Input Area -->
         <StackPanel Grid.Row="2" Orientation="Vertical">
-            <TextBox x:Name="UserInputTextBox" Margin="0,0,0,5" Height="30"/>
+            <TextBox x:Name="UserInputTextBox" Margin="0,0,0,10" Height="35" FontSize="14"
+                     Background="#333" Foreground="White" BorderBrush="#FFFFFF33" BorderThickness="1"
+                     AcceptsReturn="False" KeyDown="UserInputTextBox_KeyDown"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Send" Click="SendButton_Click" Width="80" Margin="5"/>
-                <Button Content="Show Tasks" Click="ShowTasks_Click" Width="100" Margin="5"/>
-                <Button Content="Clear Tasks" Click="ClearTasks_Click" Width="100" Margin="5"/>
-                <Button Content="Add Task" Click="OpenAddTaskPanel_Click" Width="100" Margin="5"/>
-                <Button Content="Start Quiz" Click="StartQuiz_Click" Width="100" Margin="5"/>
+                <Button Content="Send" Click="SendButton_Click" Width="90" ToolTip="Send your message"/>
+                <Button Content="Show Tasks" Click="ShowTasks_Click" Width="110" ToolTip="View all tasks"/>
+                <Button Content="Clear Tasks" Click="ClearTasks_Click" Width="110" ToolTip="Remove all tasks"/>
+                <Button Content="Add Task" Click="OpenAddTaskPanel_Click" Width="110" ToolTip="Create a new task"/>
+                <Button Content="Start Quiz" Click="StartQuiz_Click" Width="110" ToolTip="Test your cybersecurity knowledge"/>
             </StackPanel>
         </StackPanel>
 
-       
-        <Border x:Name="AddTaskPanel" Background="#2C2C2C" CornerRadius="10" BorderBrush="White" BorderThickness="1"
-                Width="350" Height="320" VerticalAlignment="Center" HorizontalAlignment="Center"
-                Visibility="Collapsed" Panel.ZIndex="100">
-            <Grid Margin="15">
+        <!-- Add Task Panel -->
+        <Border x:Name="AddTaskPanel" Background="#2C2C2C" CornerRadius="10" BorderBrush="#FFFFFF33" BorderThickness="1"
+                Width="400" Height="350" VerticalAlignment="Center" HorizontalAlignment="Center"
+                Visibility="Collapsed" Panel.ZIndex="100" Opacity="0">
+            <Grid Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -46,41 +121,36 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
-                <TextBlock Text="Task Title:" Grid.Row="0"/>
-                <TextBox x:Name="TitleBox" Grid.Row="1" Margin="0,5,0,10"/>
-
-                <TextBlock Text="Description:" Grid.Row="2"/>
-                <TextBox x:Name="DescBox" Grid.Row="3" Height="60" TextWrapping="Wrap" Margin="0,5,0,10"/>
-
-                <TextBlock Text="Reminder Date:" Grid.Row="4"/>
-                <DatePicker x:Name="ReminderDatePicker" Grid.Row="5" Margin="0,5,0,0"/>
-
+                <TextBlock Text="Task Title:" Grid.Row="0" FontSize="14" Foreground="White"/>
+                <TextBox x:Name="TitleBox" Grid.Row="1" Margin="0,5,0,10" FontSize="14" Background="#333" Foreground="White"/>
+                <TextBlock Text="Description:" Grid.Row="2" FontSize="14" Foreground="White"/>
+                <TextBox x:Name="DescBox" Grid.Row="3" Height="80" TextWrapping="Wrap" Margin="0,5,0,10" FontSize="14" Background="#333" Foreground="White"/>
+                <TextBlock Text="Reminder Date:" Grid.Row="4" FontSize="14" Foreground="White"/>
+                <DatePicker x:Name="ReminderDatePicker" Grid.Row="5" Margin="0,5,0,10" Background="#333" Foreground="White"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Grid.Row="6">
-                    <Button Content="Add" Width="80" Click="AddTaskButton_Click" Background="#4CAF50" Foreground="White" Margin="0,0,10,0"/>
-                    <Button Content="Cancel" Width="80" Click="CancelAddTaskButton_Click"/>
+                    <Button Content="Add" Width="90" Click="AddTaskButton_Click" ToolTip="Add this task"/>
+                    <Button Content="Cancel" Width="90" Click="CancelAddTaskButton_Click" Background="#D32F2F" ToolTip="Cancel task creation"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        
-        <Border x:Name="QuizPanel" Background="#333" CornerRadius="10" BorderBrush="White" BorderThickness="1"
-                Width="500" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center"
-                Visibility="Collapsed" Panel.ZIndex="99">
-            <Grid Margin="15">
+        <!-- Quiz Panel -->
+        <Border x:Name="QuizPanel" Background="#2C2C2C" CornerRadius="10" BorderBrush="#FFFFFF33" BorderThickness="1"
+                Width="550" Height="450" VerticalAlignment="Center" HorizontalAlignment="Center"
+                Visibility="Collapsed" Panel.ZIndex="99" Opacity="0">
+            <Grid Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
-                <TextBlock x:Name="QuizQuestionText" FontSize="16" FontWeight="Bold" TextWrapping="Wrap" Grid.Row="0" Margin="0,0,0,10"/>
+                <TextBlock x:Name="QuizQuestionText" FontSize="16" FontWeight="Bold" TextWrapping="Wrap" Grid.Row="0" Margin="0,0,0,15" Foreground="White"/>
                 <StackPanel x:Name="QuizOptionsPanel" Grid.Row="1"/>
-                <TextBlock x:Name="QuizFeedbackText" Grid.Row="2" Margin="0,10,0,10" FontWeight="Bold"/>
+                <TextBlock x:Name="QuizFeedbackText" Grid.Row="2" Margin="0,15,0,15" FontSize="14" FontWeight="Bold"/>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="NextQuestionButton" Content="Next" Click="NextQuestionButton_Click" Width="80" Margin="0,0,10,0" Visibility="Collapsed"/>
-                    <Button x:Name="RetryQuizButton" Content="Retry" Click="RetryQuizButton_Click" Width="80" Visibility="Collapsed"/>
+                    <Button x:Name="NextQuestionButton" Content="Next" Click="NextQuestionButton_Click" Width="90" Margin="0,0,10,0" Visibility="Collapsed" ToolTip="Go to next question"/>
+                    <Button x:Name="RetryQuizButton" Content="Retry" Click="RetryQuizButton_Click" Width="90" Visibility="Collapsed" ToolTip="Restart the quiz"/>
                 </StackPanel>
             </Grid>
         </Border>
